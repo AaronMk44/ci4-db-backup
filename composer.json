@@ -1,0 +1,19 @@
+{
+  "name": "aaronmk44/ci4-db-backup",
+  "description": "A CodeIgniter 4 database backup utility",
+  "type": "library",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Aaronmk44\\Ci4DbBackup\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Aaron Mkandawire",
+      "email": "77462566+AaronMk44@users.noreply.github.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {}
+}
