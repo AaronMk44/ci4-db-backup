@@ -3,6 +3,7 @@
 namespace Ci4DbBackup;
 
 use Exception;
+use PDO;
 
 class Ci4DbBackup
 {
@@ -36,16 +37,46 @@ class Ci4DbBackup
 
     $backupFile = $path . '/' . $dbName . '_' . date("Y-m-d_H-i-s") . '.sql';
 
-    // mysqldump command
-    $command = "mysqldump --host=$this->dbHost --user=$this->dbUsername --password=$this->dbPassword $dbName > $backupFile";
+    try {
+      // Connect to the database
+      $pdo = new PDO("mysql:host=$this->dbHost;dbname=$dbName", $this->dbUsername, $this->dbPassword);
+      $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // Execute the command
-    exec($command, $output, $returnVar);
+      // Start the backup process
+      $backup = "-- Database Backup: $dbName\n-- Date: " . date("Y-m-d H:i:s") . "\n\n";
 
-    if ($returnVar === 0) {
+      // Fetch tables
+      $tables = $pdo->query('SHOW TABLES')->fetchAll(PDO::FETCH_COLUMN);
+
+      foreach ($tables as $table) {
+        // Fetch table structure
+        $createTableStmt = $pdo->query("SHOW CREATE TABLE $table")->fetch(PDO::FETCH_ASSOC);
+        $backup .= "-- Structure for table `$table`\n\n";
+        $backup .= $createTableStmt['Create Table'] . ";\n\n";
+
+        // Fetch table data
+        $rows = $pdo->query("SELECT * FROM $table")->fetchAll(PDO::FETCH_ASSOC);
+
+        if (count($rows) > 0) {
+          $backup .= "-- Data for table `$table`\n\n";
+          foreach ($rows as $row) {
+            $columns = array_map(function ($column) use ($pdo) {
+              return "`" . str_replace("`", "``", $column) . "`";
+            }, array_keys($row));
+            $values = array_map(function ($value) use ($pdo) {
+              return is_null($value) ? "NULL" : $pdo->quote($value);
+            }, array_values($row));
+            $backup .= "INSERT INTO `$table` (" . implode(", ", $columns) . ") VALUES (" . implode(", ", $values) . ");\n";
+          }
+          $backup .= "\n";
+        }
+      }
+
+      // Save the backup to a file
+      file_put_contents($backupFile, $backup);
       return "Backup successfully created at: $backupFile";
-    } else {
-      throw new Exception("An error occurred during backup. Return code: $returnVar");
+    } catch (Exception $e) {
+      throw $e;
     }
   }
 }

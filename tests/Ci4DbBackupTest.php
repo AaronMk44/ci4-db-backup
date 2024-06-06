@@ -1,15 +1,11 @@
 <?php
 
+require './vendor/autoload.php';
 
-class Ci4DbBackupTest
-{
-  public function backupTest()
-  {
-    return 'backing up';
-  }
+use Ci4DbBackup\Ci4DbBackup;
 
-  public function restoreTest()
-  {
-    return 'restoring';
-  }
-}
+(new Ci4DbBackup([
+  'host' => 'localhost',
+  'username' => 'root',
+  'password' => ''
+]))->backup('text', 'path/to/backups');
