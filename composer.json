@@ -5,7 +5,7 @@
   "license": "MIT",
   "autoload": {
     "psr-4": {
-      "Aaronmk44\\Ci4DbBackup\\": "src/"
+      "Ci4DbBackup\\": "src/Ci4DbBackup/"
     }
   },
   "authors": [
@@ -15,5 +15,7 @@
     }
   ],
   "minimum-stability": "dev",
-  "require": {}
+  "require": {
+    "php": ">=7.1.3"
+  }
 }
