@@ -5,7 +5,7 @@
 
 ## Overview
 
-Ci4 Database Backup is a PHP library designed to facilitate database backups for applications built with CodeIgniter 4. This library provides an easy way to create SQL dumps of your MySQL databases.
+Ci4 Database Backup is a PHP library designed to facilitate database backups for applications built with CodeIgniter 4 and other PHP Frameworks. It's able to operate in native PHP project too. This library provides an easy way to create SQL dumps of your MySQL databases.
 
 ## Features
 
