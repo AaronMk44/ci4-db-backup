@@ -74,7 +74,10 @@ class Ci4DbBackup
 
       // Save the backup to a file
       file_put_contents($backupFile, $backup);
-      return "Backup successfully created at: $backupFile";
+      return [
+        'message' => 'Backup successfully Created',
+        'file' => $backupFile
+      ];
     } catch (Exception $e) {
       throw $e;
     }
