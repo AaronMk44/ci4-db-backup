@@ -35,7 +35,7 @@ class Ci4DbBackup
       throw new Exception("ERR: Host not set");
     }
 
-    $backupFile = $path . '/' . $dbName . '_' . date("Y-m-d_H-i-s") . '.sql';
+    $backupFile = $path . DIRECTORY_SEPARATOR . $dbName . '_' . date("Y-m-d_H-i-s") . '.sql';
 
     try {
       // Connect to the database
